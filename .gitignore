@@ -34,3 +34,42 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+# Binaries
+bin/
+bin-debug/
+bin-release/
+
+# Other files and folders
+.settings/
+
+# My Ignores
+\.DS_Store
+\.classpath
+\.project
+\.settings
+\.metadata/
+Servers/
+target/
+.idea
+.vagrant
+*.txt
+*.gz
+*.jar
+*.zip
+*.iso
+
+_downloads
+_opt_wso2am01
+_opt_wso2am02
+_opt_wso2as521
+_opt_wso2das01
+_opt_wso2das02
+_opt_wso2dss01
+_opt_wso2dss02
+_opt_wso2esb01
+_opt_wso2esb02
+_opt_wso2greg01
+_opt_wso2greg02
+_opt_wso2is01
+_opt_wso2is02
