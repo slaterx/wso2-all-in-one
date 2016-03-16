@@ -7,6 +7,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = $base_box
   config.vm.box_url = $base_box_url
+  config.vm.box_version = "1.0.1"
   config.vm.network :private_network, ip: $ip
   config.vm.hostname = $host + ".local"
 
@@ -102,12 +103,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       wso2allinone.vm.provision :shell, :path => "shell/bootstrap.sh"
 
       ### Install WSO2
-      #wso2allinone.vm.provision "puppet" do |puppet|
-        #puppet.manifests_path = "puppet/manifests"
-        #puppet.manifest_file  = "site.pp"
-        #puppet.module_path = "puppet/modules"
+      wso2allinone.vm.provision "puppet" do |puppet|
+        puppet.manifests_path = "puppet/manifests"
+        puppet.manifest_file  = "site.pp"
+        puppet.module_path = "puppet/modules"
         #puppet.options = '--parser future'
-      #end
+      end
     end
 
   end

@@ -4,21 +4,29 @@
 # Basic updates, keys added and java configured
 rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
 yum -y install http://ucmirror.canterbury.ac.nz/linux/fedora/fedora-epel/6/i386/epel-release-6-8.noarch.rpm
-wget –-quiet http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo \
+–Sq \
+-O /etc/yum.repos.d/epel-apache-maven.repo 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 yum clean all && yum makecache fast
-yum -y install deltarpm git bash-completion apache-maven bind-utils mysql
+yum -y install deltarpm git bash-completion bind-utils mysql puppet
 yum -y update --skip-broken --exclude=kernel*
 
 
 cd ~
-wget --no-cookies --no-check-certificate –-quiet --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
-"http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.rpm"
+if ! rpm -qa | grep -qw jre1.8; then
+    wget --no-cookies \
+    --no-check-certificate \
+    --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+    "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.rpm" 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
 
-wget --no-cookies \
---no-check-certificate \
-–-quiet --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-"http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
--O jdk-7-linux-x64.rpm
+if ! rpm -qa | grep -qw jdk-1.7; then
+    wget --no-cookies \
+    --no-check-certificate \
+    --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    "http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
+    -O jdk-7-linux-x64.rpm 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
 
 yum -y localinstall *.rpm
 export JAVA_HOME=/usr/lib/jvm/java-7-oracle/
@@ -60,7 +68,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' JDBC driver already downloaded."
 else
-   wget –-quiet https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar
+   wget -Sq https://jdbc.postgresql.org/download/postgresql-9.4-1201.jdbc41.jar 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 # MySQL Driver
@@ -70,7 +78,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' JDBC driver already downloaded."
 else
-   wget –-quiet http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.30.tar.gz
+   wget -Sq http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.30.tar.gz 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 # ESB 4.9.0
@@ -80,7 +88,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://dist.wso2.org/products/enterprise-service-bus/4.9.0/wso2esb-4.9.0.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://dist.wso2.org/products/enterprise-service-bus/4.9.0/wso2esb-4.9.0.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 # AS 5.2.1
@@ -90,7 +98,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/application-server/5.2.1/wso2as-5.2.1.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/application-server/5.2.1/wso2as-5.2.1.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 # AM 1.10.0
@@ -100,7 +108,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/api-manager/1.10.0/wso2am-1.10.0.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/api-manager/1.10.0/wso2am-1.10.0.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 # GREG 5.1.0
@@ -110,7 +118,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/governance-registry/5.1.0/wso2greg-5.1.0.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/governance-registry/5.1.0/wso2greg-5.1.0.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 ## DSS 3.5.0
@@ -120,7 +128,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/data-services-server/3.5.0/wso2dss-3.5.0.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/data-services-server/3.5.0/wso2dss-3.5.0.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 ## IS 5.1.0
@@ -130,7 +138,7 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/identity-server/5.1.0/wso2is-5.1.0.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/identity-server/5.1.0/wso2is-5.1.0.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
 ## DAS 3.0.1
@@ -140,6 +148,6 @@ if [ -f $FILE ];
 then
    echo "'"$FILE"' already downloaded."
 else
-   wget –-quiet --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/data-analytics-server/3.0.1/wso2das-3.0.1.zip
+   wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/data-analytics-server/3.0.1/wso2das-3.0.1.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 

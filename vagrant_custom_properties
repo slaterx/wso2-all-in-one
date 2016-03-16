@@ -2,7 +2,7 @@
 $host = "wso2-all-in-one"
 
 # Base box name
-$base_box = "bento/centos-6.7"
+$base_box = "puppetlabs/centos-6.6-64-puppet"
 
 # VM IP address
 $ip = "192.168.11.20"
