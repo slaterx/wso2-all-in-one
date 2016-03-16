@@ -1,0 +1,8 @@
+# Name of the host and name of VM
+$host = "wso2-all-in-one"
+
+# Base box name
+$base_box = "bento/centos-6.7"
+
+# VM IP address
+$ip = "192.168.11.20"
