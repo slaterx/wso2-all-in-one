@@ -1,7 +1,0 @@
-#!/bin/bash
-
-#PUPPET MANAGED
-HISTTIMEFORMAT="%d.%m.%y %T "
-readonly HISTTIMEFORMAT
-export HISTTIMEFORMAT
-
