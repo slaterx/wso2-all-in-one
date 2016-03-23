@@ -14,19 +14,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Mount/Sync extra folder '_opt' in host with '/opt' in guest
   # suitable to deploy *.car or other artifacts to servers or checking log files
   config.ssh.sudo_command = "sudo %c"
-  config.vm.synced_folder "_opt_wso2esb01/", "/opt/wso2esb01", create: true
-  config.vm.synced_folder "_opt_wso2esb02/", "/opt/wso2esb02", create: true
-  config.vm.synced_folder "_opt_wso2as521/", "/opt/wso2as521", create: true
-  config.vm.synced_folder "_opt_wso2am01/", "/opt/wso2am01", create: true
-  config.vm.synced_folder "_opt_wso2am02/", "/opt/wso2am02", create: true
-  config.vm.synced_folder "_opt_wso2greg01/", "/opt/wso2greg01", create: true
-  config.vm.synced_folder "_opt_wso2greg02/", "/opt/wso2greg02", create: true
-  config.vm.synced_folder "_opt_wso2dss01/", "/opt/wso2dss01", create: true
-  config.vm.synced_folder "_opt_wso2dss02/", "/opt/wso2dss02", create: true
-  config.vm.synced_folder "_opt_wso2is01/", "/opt/wso2is01", create: true
-  config.vm.synced_folder "_opt_wso2is02/", "/opt/wso2is02", create: true
-  config.vm.synced_folder "_opt_wso2das01/", "/opt/wso2das01", create: true
-  config.vm.synced_folder "_opt_wso2das02/", "/opt/wso2das02", create: true
+  #config.vm.synced_folder "_opt_wso2esb01/", "/opt/wso2/wso2esb01", create: false
+  #config.vm.synced_folder "_opt_wso2esb02/", "/opt/wso2/wso2esb02", create: false
+  #config.vm.synced_folder "_opt_wso2as521/", "/opt/wso2/wso2as521", create: false
+  #config.vm.synced_folder "_opt_wso2am01/", "/opt/wso2/wso2am01", create: false
+  #config.vm.synced_folder "_opt_wso2am02/", "/opt/wso2/wso2am02", create: false
+  #config.vm.synced_folder "_opt_wso2greg01/", "/opt/wso2/wso2greg01", create: false
+  #config.vm.synced_folder "_opt_wso2greg02/", "/opt/wso2/wso2greg02", create: false
+  #config.vm.synced_folder "_opt_wso2dss01/", "/opt/wso2/wso2dss01", create: false
+  #config.vm.synced_folder "_opt_wso2dss02/", "/opt/wso2/wso2dss02", create: false
+  #config.vm.synced_folder "_opt_wso2is01/", "/opt/wso2/wso2is01", create: false
+  #config.vm.synced_folder "_opt_wso2is02/", "/opt/wso2/wso2is02", create: false
+  #config.vm.synced_folder "_opt_wso2das01/", "/opt/wso2/wso2das01", create: false
+  #config.vm.synced_folder "_opt_wso2das02/", "/opt/wso2/wso2das02", create: false
+  config.vm.synced_folder "_opt_wso2", "/opt/wso2", create: true
 
 
 
@@ -39,10 +40,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # ESB-01 (offset +0)
     wso2allinone.vm.network "forwarded_port", guest: 9443, host: 9443
     wso2allinone.vm.network "forwarded_port", guest: 8280, host: 8280
+    wso2allinone.vm.network "forwarded_port", guest: 8243, host: 8243
 
     # ESB-02 (offset +2)
     wso2allinone.vm.network "forwarded_port", guest: 9445, host: 9445
     wso2allinone.vm.network "forwarded_port", guest: 8282, host: 8282
+    wso2allinone.vm.network "forwarded_port", guest: 8245, host: 8245
 
     # AS 5.2.1 (offset +30)
     wso2allinone.vm.network "forwarded_port", guest: 9473, host: 9473
@@ -85,6 +88,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # DAS-02 (offset +22)
     wso2allinone.vm.network "forwarded_port", guest: 9465, host: 9465
     wso2allinone.vm.network "forwarded_port", guest: 8302, host: 8302
+
+    # MySQL Port (No offset)
+    wso2allinone.vm.network "forwarded_port", guest: 3306, host: 3306
 
     wso2allinone.vm.provider "virtualbox" do |vb|
       # Enable operations from VirtualBox GUI

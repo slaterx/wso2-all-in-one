@@ -5,31 +5,10 @@
 rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
 yum -y install http://ucmirror.canterbury.ac.nz/linux/fedora/fedora-epel/6/i386/epel-release-6-8.noarch.rpm
 wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo \
-–Sq \
 -O /etc/yum.repos.d/epel-apache-maven.repo 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 yum clean all && yum makecache fast
 yum -y install deltarpm git bash-completion bind-utils mysql puppet
 yum -y update --skip-broken --exclude=kernel*
-
-
-cd ~
-if ! rpm -qa | grep -qw jre1.8; then
-    wget --no-cookies \
-    --no-check-certificate \
-    --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
-    "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.rpm" 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
-fi
-
-if ! rpm -qa | grep -qw jdk-1.7; then
-    wget --no-cookies \
-    --no-check-certificate \
-    --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-    "http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
-    -O jdk-7-linux-x64.rpm 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
-fi
-
-yum -y localinstall *.rpm
-export JAVA_HOME=/usr/lib/jvm/java-7-oracle/
 
 # Adding swap space
 # Size of swapfile in megabytes
@@ -61,6 +40,33 @@ cat /proc/meminfo | grep Swap
 mkdir -p /vagrant/_downloads
 cd /vagrant/_downloads
 
+if ! rpm -qa | grep -qw jre1.8; then
+    wget --no-cookies \
+    --no-check-certificate \
+    --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+    "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.rpm" 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
+
+if ! rpm -qa | grep -qw jdk-1.7; then
+    wget --no-cookies \
+    --no-check-certificate \
+    --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    "http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
+    -O jdk-7-linux-x64.rpm 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+
+    wget --no-cookies \
+    --no-check-certificate \
+    --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+    "http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip" \
+    -O UnlimitedJCEPolicyJDK7.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
+
+yum -y localinstall *.rpm
+export JAVA_HOME=/usr/lib/jvm/java-7-oracle/
+rm -rf /usr/java/default/lib/security/local_policy.jar
+rm -rf /usr/java/default/lib/security/US_export_policy.jar
+
+
 # Postgres Driver
 FILE=postgresql-9.4-1201.jdbc41.jar
 
@@ -72,14 +78,16 @@ else
 fi
 
 # MySQL Driver
-FILE=mysql-connector-java-5.1.30.tar.gz
+FILE=mysql-connector-java-5.1.38.tar.gz
 
 if [ -f $FILE ];
 then
    echo "'"$FILE"' JDBC driver already downloaded."
 else
-   wget -Sq http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.30.tar.gz 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+   wget -Sq http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.38.tar.gz 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
+
+rm -rf mysql-connector-java-5.1.38-bin.jar && tar -xzf mysql-connector-java-5.1.38.tar.gz && cp -R mysql-connector-java-5.1.38/mysql-connector-java-5.1.38-bin.jar . && rm -rf mysql-connector-java-5.1.38/
 
 # ESB 4.9.0
 FILE=wso2esb-4.9.0.zip
@@ -149,5 +157,35 @@ then
    echo "'"$FILE"' already downloaded."
 else
    wget -Sq --user-agent="testuser" --referer="http://connect.wso2.com/wso2/getform/reg/new_product_download" http://product-dist.wso2.com/products/data-analytics-server/3.0.1/wso2das-3.0.1.zip 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
+
+## Apache ActiveMQ
+FILE=apache-activemq-5.12.3-bin.tar.gz
+
+if [ -f $FILE ];
+then
+   echo "'"$FILE"' already downloaded."
+else
+   wget http://www-us.apache.org/dist/activemq/5.12.3/apache-activemq-5.12.3-bin.tar.gz 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
+
+## Apache Ant
+FILE=apache-ant-1.9.6-bin.tar.gz
+
+if [ -f $FILE ];
+then
+   echo "'"$FILE"' already downloaded."
+else
+   wget http://www-eu.apache.org/dist//ant/binaries/apache-ant-1.9.6-bin.tar.gz 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
+fi
+
+## Apache Maven
+FILE=apache-maven-3.3.9-bin.tar.gz
+
+if [ -f $FILE ];
+then
+   echo "'"$FILE"' already downloaded."
+else
+   wget http://www-us.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz 2>/tmp/err.log || cat /tmp/err.log; rm -f /tmp/err.log
 fi
 
