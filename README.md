@@ -10,7 +10,8 @@ From a security perspective, the puppet scripts are sanitizing the VM in the sim
 From a testing perspective, TravisCI runs periodically a test on each commit.
 
 ## Instructions
- - Local machine via vagrant (OSX, Windows) (which will run puppet + docker)
+ - Local machine via vagrant (OSX, Windows) (which will run puppet + docker):
+ 
  	```
  	vagrant up
  	```
